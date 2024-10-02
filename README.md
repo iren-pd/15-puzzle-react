@@ -1,7 +1,7 @@
 # Игра "Пятнашки"
 
 Стэк:
-Redux-Toolkit, TypeScript, Tailwind
+Redux-Toolkit, TypeScript, Tailwind, Shadcn
 
 ## Особенности:
 Учет ходов, история ходов, сохранение состояния при перезагрузки страницы, Express, MongoDB
