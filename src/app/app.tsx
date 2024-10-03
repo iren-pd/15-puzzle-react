@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Board } from '../components/Board';
-import { createBoard } from '../redux/slices/App';
+import { createBoard } from '../redux/slices/Board';
 
 export const App: FC = () => {
   const dispatch = useDispatch();

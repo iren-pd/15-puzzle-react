@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 
 export const Board: FC = () => {
-  const board = useSelector((state: RootState) => state.app.board);
+  const board = useSelector((state: RootState) => state.board.board);
   console.log(board);
 
   return <div>Board</div>;

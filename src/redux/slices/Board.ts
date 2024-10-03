@@ -11,7 +11,7 @@ const initialState: AppState = {
   board: [],
 };
 
-export const appSlice = createSlice({
+export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
@@ -38,6 +38,6 @@ export const appSlice = createSlice({
   },
 });
 
-export const { createBoard } = appSlice.actions;
+export const { createBoard } = boardSlice.actions;
 
-export default appSlice.reducer;
+export default boardSlice.reducer;
