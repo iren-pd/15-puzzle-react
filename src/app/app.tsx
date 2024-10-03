@@ -1,30 +1,21 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { decrement, increment } from '../redux/slices/App';
-import type { RootState } from '../redux/store';
+import { FC, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Board } from '../components/Board';
+import { createBoard } from '../redux/slices/App';
 
-export function App() {
-  const count = useSelector((state: RootState) => state.app.value);
+export const App: FC = () => {
   const dispatch = useDispatch();
+  const boardSize = { x: 3, y: 5 };
+
+  useEffect(() => {
+    dispatch(createBoard(boardSize));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
-      <div>
-        <button
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
-        >
-          Increment
-        </button>
-        <span>{count}</span>
-        <button
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          Decrement
-        </button>
-      </div>
+      <Board />
     </div>
   );
-}
-
-export default App;
+};
