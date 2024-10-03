@@ -1,13 +1,14 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-export type Board = (number | null)[];
+export type BoardType = (number | null)[];
+export type BoardSizeType = { x: number; y: number };
 
-export interface AppState {
-  board: Board[];
+export interface BoardState {
+  board: BoardType[];
 }
 
-const initialState: AppState = {
+const initialState: BoardState = {
   board: [],
 };
 
@@ -15,10 +16,10 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    createBoard: (state, action: PayloadAction<{ x: number; y: number }>) => {
+    createBoard: (state, action: PayloadAction<BoardSizeType>) => {
       const { board } = state;
       const { x, y } = action.payload;
-      const arr: Board = [];
+      const arr: BoardType = [];
 
       for (let i = 1; i <= x * y - 1; i++) {
         arr.push(i);
