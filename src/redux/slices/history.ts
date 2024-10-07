@@ -47,12 +47,15 @@ export const historySlice = createSlice({
       state.index += 1;
       list.push(board);
     },
+
     changePoint: (state, action: PayloadAction<THistory>) => {
       state.index = action.payload.index;
     },
+
     resetHistory: (state) => {
       state = initialState;
     },
+
     setHistory: (state, action: PayloadAction<TSetHistory>) => {
       state = action.payload.state;
     },

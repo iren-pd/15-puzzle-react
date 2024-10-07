@@ -6,7 +6,7 @@ import { addToHistory } from '../redux/slices/history';
 
 export const App: FC = () => {
   const dispatch = useDispatch();
-  const boardSize = { x: 2, y: 2 };
+  const boardSize = { rows: 2, columns: 2 };
 
   useEffect(() => {
     dispatch(createBoard(boardSize));

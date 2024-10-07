@@ -2,7 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 export type TBoard = (number | null)[][];
-export type TBoardSize = { x: number; y: number };
+export type TBoardSize = { rows: number; columns: number };
 export type TSetBoard = {
   state: TBoard;
 };
@@ -15,10 +15,10 @@ export const boardSlice = createSlice({
   reducers: {
     createBoard: (state, action: PayloadAction<TBoardSize>) => {
       const board = state;
-      const { x, y } = action.payload;
+      const { rows, columns } = action.payload;
       const arr: (number | null)[] = [];
 
-      for (let i = 1; i <= x * y - 1; i++) {
+      for (let i = 1; i <= rows * columns - 1; i++) {
         arr.push(i);
       }
 
@@ -31,7 +31,7 @@ export const boardSlice = createSlice({
 
       for (let i = 0; i <= arr.length; i++) {
         while (arr.length) {
-          const row = arr.splice(0, y);
+          const row = arr.splice(0, columns);
           board.push(row);
         }
       }
