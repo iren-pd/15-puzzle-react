@@ -6,25 +6,33 @@ export const Game = () => {
   const board = useSelector((state: RootState) => state.board);
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-pink-50 ">
-      {board.map((row, index) => (
-        <div key={index} className="flex flex-col">
-          {row.map((cell, index) => (
+    <div className="flex justify-center items-center min-h-screen bg-pink-50 overflow-auto">
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: `repeat(${board[0].length}, 100px)`,
+          gridTemplateRows: `repeat(${board.length}, 100px)`,
+        }}
+      >
+        {board.map((row, rowIndex) =>
+          row.map((cell, cellIndex) => (
             <div
-              key={index}
-              className="border border-pink-700 px-8 py-4 text-center bg-white min-h-20 flex-1 text-pink-700 text-4xl font-bold"
+              key={`${rowIndex}-${cellIndex}`}
+              className="text-4xl border border-pink-700 flex items-center justify-center text-pink-700 font-bold"
               style={{
                 backgroundImage: `url(${cellBackground})`,
                 backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
+                width: '100px',
+                height: '100px',
               }}
             >
               {cell}
             </div>
-          ))}
-        </div>
-      ))}
+          ))
+        )}
+      </div>
     </div>
   );
 };
