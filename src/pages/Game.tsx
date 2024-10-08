@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { Footer } from '../components/Footer/Footer';
 import cellBackground from '../img/icon-board.svg';
 import { RootState } from '../redux/store';
 
@@ -33,6 +34,8 @@ export const Game = () => {
           ))
         )}
       </div>
+
+      <Footer />
     </div>
   );
 };

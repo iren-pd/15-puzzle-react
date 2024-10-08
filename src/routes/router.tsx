@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import { Config } from '../pages/Config';
 import { Game } from '../pages/Game';
 

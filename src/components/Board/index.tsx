@@ -6,7 +6,5 @@ export const Board: FC = () => {
   const board = useSelector((state: RootState) => state.board);
   const history = useSelector((state: RootState) => state.history);
 
-  console.log(history);
-
   return <div>Board</div>;
 };

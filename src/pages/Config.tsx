@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Footer } from '../components/Footer/Footer';
 import { createBoard } from '../redux/slices/board';
 
 export const Config = () => {
@@ -65,6 +66,8 @@ export const Config = () => {
           Начать игру
         </button>
       </div>
+
+      <Footer />
     </div>
   );
 };

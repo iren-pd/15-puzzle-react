@@ -11,7 +11,17 @@ module.exports = {
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        catRun: {
+          '0%': { transform: 'translateX(-100vw)' },
+          '100%': { transform: 'translateX(100vw)' },
+        },
+      },
+      animation: {
+        catRun: 'catRun 10s linear infinite',
+      },
+    },
   },
   plugins: [],
 };
