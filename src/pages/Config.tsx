@@ -21,7 +21,7 @@ export const Config = () => {
 
   const handleSizeBoardSubmit = () => {
     dispatch(createBoard(sizeBoard));
-    navigation('/game');
+    navigation('/15-puzzle-react/game');
   };
 
   return (
