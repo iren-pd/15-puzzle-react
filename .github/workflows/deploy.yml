@@ -22,7 +22,7 @@ jobs:
 
       # Шаг 3: Установить зависимости
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       # Шаг 4: Сборка проекта NX (Vite)
       - name: Build project
