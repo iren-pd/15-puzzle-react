@@ -47,5 +47,5 @@ export default defineConfig({
     },
   },
 
-  base: 'iren-pd.github.io',
+  base: '/15-puzzle-react/',
 });
