@@ -1,0 +1,36 @@
+name: Deploy Vite project to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Здесь можно указать вашу основную ветку, например 'main' или 'master'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Шаг 1: Checkout кода
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Шаг 2: Установить Node.js (можете указать версию Node.js)
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # Укажите версию Node.js, с которой работает ваш проект
+
+      # Шаг 3: Установить зависимости
+      - name: Install dependencies
+        run: npm install
+
+      # Шаг 4: Сборка проекта NX (Vite)
+      - name: Build project
+        run: npm run build --workspace=<имя_вашего_приложения>
+
+      # Шаг 5: Деплой на GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/apps/<имя_вашего_приложения>

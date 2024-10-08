@@ -22,13 +22,7 @@ export const Config = () => {
   };
 
   return (
-    <div
-      className="flex flex-col justify-center items-center min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: 'url(../img/bc-config.jpg)',
-        backgroundSize: 'cover',
-      }}
-    >
+    <div className="flex flex-col justify-center items-center min-h-screen bg-cover bg-center">
       <div className="flex flex-col space-y-4 p-4 bg-pink-300 rounded-lg shadow-lg">
         <label
           htmlFor="rows"
