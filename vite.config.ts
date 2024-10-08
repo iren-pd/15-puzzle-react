@@ -2,10 +2,12 @@
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
-export default defineConfig({
-  base: '/',
+export default ({ mode }) => {
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+  return defineConfig({
+  base: mode === 'development' ? './' : '/frontend/',
   root: __dirname,
   cacheDir: './node_modules/.vite/iren',
 
@@ -47,4 +49,5 @@ export default defineConfig({
       provider: 'v8',
     },
   },
-});
+  });
+};
