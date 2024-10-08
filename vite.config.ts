@@ -7,7 +7,7 @@ import { defineConfig, loadEnv } from 'vite';
 export default ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   return defineConfig({
-  base: mode === 'development' ? './' : '/frontend/',
+  base: mode === 'development' ? './' : '/15-puzzle-react/',
   root: __dirname,
   cacheDir: './node_modules/.vite/iren',
 
