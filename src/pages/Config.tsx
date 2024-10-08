@@ -1,12 +1,15 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Footer } from '../components/Footer/Footer';
 import { createBoard } from '../redux/slices/board';
+import { RootState } from '../redux/store';
 
 export const Config = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigation = useNavigate();
+  const board = useSelector((state: RootState) => state.board);
   const [sizeBoard, setSizeBoard] = useState({ rows: 0, columns: 0 });
 
   const handleSizeBoardInput = (

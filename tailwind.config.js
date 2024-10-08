@@ -19,7 +19,7 @@ module.exports = {
         },
       },
       animation: {
-        catRun: 'catRun 10s linear infinite',
+        catRun: 'catRun 15s linear infinite',
       },
     },
   },

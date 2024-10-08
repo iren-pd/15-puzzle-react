@@ -4,7 +4,7 @@ import { Footer } from '../components/Footer/Footer';
 import { TBoard } from '../redux/slices/board';
 import { RootState } from '../redux/store';
 
-export interface NullCellPosition {
+export interface TNullCellPosition {
   row: number;
   column: number;
 }
@@ -16,12 +16,16 @@ export const Game = () => {
     (window.innerHeight - 200) / board.length
   );
 
-  const findNullCell = (board: TBoard): NullCellPosition | undefined => {
+  const findNullCell = (board: TBoard): TNullCellPosition => {
+    if (!board.length) return { row: 0, column: 0 };
+
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board[i].length; j++) {
         if (board[i][j] === null) return { row: i, column: j };
       }
     }
+
+    return { row: 0, column: 0 };
   };
   const nullCell = findNullCell(board);
 
@@ -38,9 +42,9 @@ export const Game = () => {
     return neighbor.top || neighbor.bottom || neighbor.right || neighbor.left;
   };
 
-  const makeTurn = (board: TBoard, cell: [number, number]): TBoard => {
-    const [row, column] = cell;
-  };
+  //   const makeTurn = (board: TBoard, cell: [number, number]): TBoard => {
+  //     const [row, column] = cell;
+  //   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-pink-50 overflow-auto p-20">
@@ -57,6 +61,7 @@ export const Game = () => {
               key={`${rowIndex}-${cellIndex}`}
               cell={cell}
               isNear={isNear(rowIndex, cellIndex)}
+              cellSize={cellSize}
             />
           ))
         )}

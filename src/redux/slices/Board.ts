@@ -18,6 +18,8 @@ export const boardSlice = createSlice({
       const { rows, columns } = action.payload;
       const arr: (number | null)[] = [];
 
+      if (board.length) state = [];
+
       for (let i = 1; i <= rows * columns - 1; i++) {
         arr.push(i);
       }
