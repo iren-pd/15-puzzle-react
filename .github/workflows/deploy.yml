@@ -3,7 +3,7 @@ name: Deploy Vite project to GitHub Pages
 on:
   push:
     branches:
-      - feature  # Здесь можно указать вашу основную ветку, например 'main' или 'master'
+      - main  # Здесь можно указать вашу основную ветку, например 'main' или 'master'
 
 jobs:
   build:
