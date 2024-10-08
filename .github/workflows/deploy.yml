@@ -26,7 +26,7 @@ jobs:
 
       # Шаг 4: Сборка проекта NX (Vite)
       - name: Build project
-        run: npx nx run iren:build --workspace=<имя_вашего_приложения>
+        run: npx nx run iren:build
 
       # Шаг 5: Деплой на GitHub Pages
       - name: Deploy to GitHub Pages
