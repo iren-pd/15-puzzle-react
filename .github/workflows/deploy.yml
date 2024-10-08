@@ -9,6 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+
     steps:
       # Шаг 1: Checkout кода
       - name: Checkout repository
