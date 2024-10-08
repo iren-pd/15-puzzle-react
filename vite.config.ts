@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  base: '/15-puzzle-react/',
   root: __dirname,
   cacheDir: './node_modules/.vite/iren',
 
@@ -46,6 +47,4 @@ export default defineConfig({
       provider: 'v8',
     },
   },
-
-  base: '/15-puzzle-react/',
 });
