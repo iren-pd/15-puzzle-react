@@ -4,11 +4,11 @@ import { Game } from '../pages/Game';
 
 export const router = createBrowserRouter([
   {
-    path: '/15-puzzle-react/',
+    path: '/',
     element: <Config />,
   },
   {
-    path: '/15-puzzle-react/game',
+    path: '/game',
     element: <Game />,
-  }
+  },
 ]);

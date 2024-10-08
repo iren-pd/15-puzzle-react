@@ -18,8 +18,6 @@ export const boardSlice = createSlice({
       const { rows, columns } = action.payload;
       const arr: (number | null)[] = [];
 
-      if (board.length) state = [];
-
       for (let i = 1; i <= rows * columns - 1; i++) {
         arr.push(i);
       }
@@ -42,9 +40,13 @@ export const boardSlice = createSlice({
     setBoard: (state, action: PayloadAction<TSetBoard>) => {
       state = action.payload.state;
     },
+
+    resetBoard: (state) => {
+      return initialState;
+    },
   },
 });
 
-export const { createBoard, setBoard } = boardSlice.actions;
+export const { createBoard, setBoard, resetBoard } = boardSlice.actions;
 
 export default boardSlice.reducer;

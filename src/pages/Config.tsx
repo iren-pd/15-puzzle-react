@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Footer } from '../components/Footer/Footer';
-import { createBoard } from '../redux/slices/board';
+import { createBoard, resetBoard } from '../redux/slices/board';
 import { RootState } from '../redux/store';
 
 export const Config = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigation = useNavigate();
   const board = useSelector((state: RootState) => state.board);
   const [sizeBoard, setSizeBoard] = useState({ rows: 0, columns: 0 });
@@ -20,9 +19,17 @@ export const Config = () => {
   };
 
   const handleSizeBoardSubmit = () => {
+    if (!sizeBoard.rows || !sizeBoard.columns) return;
+
     dispatch(createBoard(sizeBoard));
-    navigation('/15-puzzle-react/game');
+    navigation('/game');
   };
+
+  useEffect(() => {
+    if (board.length) {
+      dispatch(resetBoard());
+    }
+  }, [board.length, dispatch]);
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-cover bg-center">

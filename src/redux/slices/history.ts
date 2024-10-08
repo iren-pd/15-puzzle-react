@@ -20,20 +20,6 @@ const initialState: THistory = {
   list: [],
 };
 
-const mockHistory = {
-  index: 1,
-  list: [
-    [
-      [1, 2],
-      [3, null],
-    ],
-    [
-      [null, 1],
-      [2, 3],
-    ],
-  ],
-};
-
 export const historySlice = createSlice({
   name: 'history',
   initialState,

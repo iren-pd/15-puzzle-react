@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Cell } from '../components/Cell/Cell';
 import { Footer } from '../components/Footer/Footer';
 import { TBoard } from '../redux/slices/board';
@@ -11,10 +13,14 @@ export interface TNullCellPosition {
 
 export const Game = () => {
   const board = useSelector((state: RootState) => state.board);
-  const cellSize = Math.min(
-    window.innerWidth / board[0].length,
-    (window.innerHeight - 200) / board.length
-  );
+  const navigate = useNavigate();
+
+  const cellSize = board.length
+    ? Math.min(
+        window.innerWidth / board[0].length,
+        (window.innerHeight - 200) / board.length
+      )
+    : 0;
 
   const findNullCell = (board: TBoard): TNullCellPosition => {
     if (!board.length) return { row: 0, column: 0 };
@@ -46,26 +52,36 @@ export const Game = () => {
   //     const [row, column] = cell;
   //   };
 
+  useEffect(() => {
+    if (!board.length) {
+      navigate('/');
+    }
+  }, []);
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-pink-50 overflow-auto p-20">
-      <div
-        className="grid"
-        style={{
-          gridTemplateColumns: `repeat(${board[0].length}, ${cellSize}px)`,
-          gridTemplateRows: `repeat(${board.length}, ${cellSize}px)`,
-        }}
-      >
-        {board.map((row, rowIndex) =>
-          row.map((cell, cellIndex) => (
-            <Cell
-              key={`${rowIndex}-${cellIndex}`}
-              cell={cell}
-              isNear={isNear(rowIndex, cellIndex)}
-              cellSize={cellSize}
-            />
-          ))
-        )}
-      </div>
+      {board.length ? (
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: `repeat(${board[0].length}, ${cellSize}px)`,
+            gridTemplateRows: `repeat(${board.length}, ${cellSize}px)`,
+          }}
+        >
+          {board.map((row, rowIndex) =>
+            row.map((cell, cellIndex) => (
+              <Cell
+                key={`${rowIndex}-${cellIndex}`}
+                cell={cell}
+                isNear={isNear(rowIndex, cellIndex)}
+                cellSize={cellSize}
+              />
+            ))
+          )}
+        </div>
+      ) : (
+        <div></div>
+      )}
 
       <Footer />
     </div>
