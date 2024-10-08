@@ -4,12 +4,14 @@ import cellBackground from '../../img/icon-board.svg';
 export const Cell = ({
   isNear,
   cell,
+  cellSize,
 }: {
   isNear: boolean;
   cell: number | null;
+  cellSize: number;
 }) => {
   const styleForCell =
-    'text-4xl border border-pink-700 flex items-center justify-center text-pink-700 font-bold';
+    'px-2 text-3xl border border-pink-700 flex items-center justify-center text-pink-700 font-bold';
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -22,8 +24,8 @@ export const Cell = ({
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        width: '100px',
-        height: '100px',
+        width: `${cellSize}px`,
+        height: `${cellSize}px`,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

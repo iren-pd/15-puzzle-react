@@ -11,6 +11,10 @@ export interface NullCellPosition {
 
 export const Game = () => {
   const board = useSelector((state: RootState) => state.board);
+  const cellSize = Math.min(
+    window.innerWidth / board[0].length,
+    (window.innerHeight - 200) / board.length
+  );
 
   const findNullCell = (board: TBoard): NullCellPosition | undefined => {
     for (let i = 0; i < board.length; i++) {
@@ -34,13 +38,17 @@ export const Game = () => {
     return neighbor.top || neighbor.bottom || neighbor.right || neighbor.left;
   };
 
+  const makeTurn = (board: TBoard, cell: [number, number]): TBoard => {
+    const [row, column] = cell;
+  };
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-pink-50 overflow-auto">
+    <div className="flex justify-center items-center min-h-screen bg-pink-50 overflow-auto p-20">
       <div
         className="grid"
         style={{
-          gridTemplateColumns: `repeat(${board[0].length}, 100px)`,
-          gridTemplateRows: `repeat(${board.length}, 100px)`,
+          gridTemplateColumns: `repeat(${board[0].length}, ${cellSize}px)`,
+          gridTemplateRows: `repeat(${board.length}, ${cellSize}px)`,
         }}
       >
         {board.map((row, rowIndex) =>

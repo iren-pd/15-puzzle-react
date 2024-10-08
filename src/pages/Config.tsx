@@ -33,7 +33,7 @@ export const Config = () => {
             name="rows"
             value={sizeBoard.rows === 0 ? '' : sizeBoard.rows}
             onChange={handleSizeBoardInput}
-            type="text"
+            type="number"
             className="mt-2 ml-2 p-2 border bg-pink-100 border-pink-500 rounded focus:outline-none focus:ring-2 focus:ring-pink-400 transition duration-200 hover:border-pink-700"
           />
         </label>
@@ -47,7 +47,7 @@ export const Config = () => {
             name="columns"
             value={sizeBoard.columns === 0 ? '' : sizeBoard.columns}
             onChange={handleSizeBoardInput}
-            type="text"
+            type="number"
             className="mt-2 ml-2 p-2 border bg-pink-100 border-pink-500 rounded focus:outline-none focus:ring-2 focus:ring-pink-400 transition duration-200 hover:border-pink-700"
           />
         </label>
