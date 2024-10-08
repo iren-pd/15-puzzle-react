@@ -26,11 +26,11 @@ jobs:
 
       # Шаг 4: Сборка проекта NX (Vite)
       - name: Build project
-        run: npm run build --workspace=<имя_вашего_приложения>
+        run: npx nx run iren:build --workspace=<имя_вашего_приложения>
 
       # Шаг 5: Деплой на GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/apps/<имя_вашего_приложения>
+          publish_dir: ./dist
