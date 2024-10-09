@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useGSAP } from '@gsap/react';
+import { useRef, useState } from 'react';
 import cellBackground from '../../img/icon-board.svg';
+import gsap from 'gsap';
 
 export const Cell = ({
   isNear,
@@ -15,9 +17,35 @@ export const Cell = ({
   const styleForCell =
     'px-2 text-3xl border border-pink-700 flex items-center justify-center text-pink-700 font-bold';
   const [isHovered, setIsHovered] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useGSAP((context, contextSafe) => {
+    const onClickCell = () => {
+      if (contextSafe) {
+        contextSafe(() => {
+          if (ref.current) {
+            gsap.to(ref.current, { x: `+=${cellSize}` });
+          }
+          console.log(contextSafe);
+
+        })();
+      }
+    };
+
+    if (ref.current) {
+      ref.current.addEventListener('click', onClickCell);
+    }
+
+    return () => {
+      if (ref.current) {
+        ref.current.removeEventListener('click', onClickCell);
+      }
+    };
+  }, {});
 
   return (
     <div
+      ref={ref}
       className={`${styleForCell} ${
         isHovered && isNear ? 'bg-pink-300 cursor-pointer' : ''
       }`}
