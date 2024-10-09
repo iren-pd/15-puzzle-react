@@ -39,14 +39,10 @@ export const Game = () => {
   const isNear = (rowIndex: number, cellIndex: number) => {
     const { row, column } = nullCell;
 
-    const neighbor = {
-      top: row === rowIndex - 1 && column === cellIndex,
-      bottom: row === rowIndex + 1 && column === cellIndex,
-      right: row === rowIndex && column === cellIndex + 1,
-      left: row === rowIndex && column === cellIndex - 1,
-    };
-
-    return neighbor.top || neighbor.bottom || neighbor.right || neighbor.left;
+    return (
+      (row === rowIndex && Math.abs(column - cellIndex) === 1) ||
+      (column === cellIndex && Math.abs(row - rowIndex) === 1)
+    );
   };
 
   const makeTurn = (
@@ -95,6 +91,8 @@ export const Game = () => {
                 isNear={isNear(rowIndex, cellIndex)}
                 cellSize={cellSize}
                 onClick={() => handleReplaceCell(rowIndex, cellIndex)}
+                position={{ row: rowIndex, column: cellIndex }}
+                nullCell={nullCell}
               />
             ))
           )}

@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 import { useRef, useState } from 'react';
 import cellBackground from '../../img/icon-board.svg';
-import gsap from 'gsap';
 
 export const Cell = ({
   isNear,
@@ -15,53 +15,59 @@ export const Cell = ({
   onClick: () => void;
 }) => {
   const styleForCell =
-    'px-2 text-3xl border border-pink-700 flex items-center justify-center text-pink-700 font-bold';
+    'px-2 text-3xl flex items-center justify-center text-pink-700 font-bold absolute inset-0';
   const [isHovered, setIsHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  useGSAP((context, contextSafe) => {
-    const onClickCell = () => {
-      if (contextSafe) {
-        contextSafe(() => {
-          if (ref.current) {
-            gsap.to(ref.current, { x: `+=${cellSize}` });
-          }
-          console.log(contextSafe);
+//   useGSAP((context, contextSafe) => {
+//     const onClickCell = () => {
+//       if (contextSafe) {
+//         contextSafe(() => {
+//           if (ref.current) {
+//             gsap.to(ref.current, { x: `+=${cellSize}` });
+//           }
+//         })();
+//       }
+//     };
 
-        })();
-      }
-    };
+//     if (ref.current) {
+//       ref.current.addEventListener('click', onClickCell);
+//     }
 
-    if (ref.current) {
-      ref.current.addEventListener('click', onClickCell);
-    }
-
-    return () => {
-      if (ref.current) {
-        ref.current.removeEventListener('click', onClickCell);
-      }
-    };
-  }, {});
+//     return () => {
+//       if (ref.current) {
+//         ref.current.removeEventListener('click', onClickCell);
+//       }
+//     };
+//   }, {});
 
   return (
     <div
-      ref={ref}
-      className={`${styleForCell} ${
-        isHovered && isNear ? 'bg-pink-300 cursor-pointer' : ''
-      }`}
+      className={`relative border border-pink-500`}
       style={{
+        width: `${cellSize}px`,
+        height: `${cellSize}px`,
         backgroundImage: `url(${cellBackground})`,
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        width: `${cellSize}px`,
-        height: `${cellSize}px`,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
     >
-      {cell}
+      <div
+        ref={ref}
+        className={`${styleForCell} ${
+          isHovered && isNear ? ' cursor-pointer' : ''
+        } `}
+        style={{
+          backgroundColor:
+            isHovered && isNear ? 'rgba(255, 182, 193, 0.5)' : 'transparent',
+        }}
+      >
+        {cell}
+      </div>
     </div>
   );
 };
