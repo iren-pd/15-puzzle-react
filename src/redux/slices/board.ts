@@ -38,7 +38,7 @@ export const boardSlice = createSlice({
     },
 
     setBoard: (state, action: PayloadAction<TSetBoard>) => {
-      state = action.payload.state;
+      return action.payload.state;
     },
 
     resetBoard: (state) => {

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Cell } from '../components/Cell/Cell';
 import { Footer } from '../components/Footer/Footer';
-import { TBoard } from '../redux/slices/board';
+import { setBoard, TBoard } from '../redux/slices/board';
 import { RootState } from '../redux/store';
 
 export interface TNullCellPosition {
@@ -13,6 +13,7 @@ export interface TNullCellPosition {
 
 export const Game = () => {
   const board = useSelector((state: RootState) => state.board);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const cellSize = board.length
@@ -48,13 +49,31 @@ export const Game = () => {
     return neighbor.top || neighbor.bottom || neighbor.right || neighbor.left;
   };
 
-  //   const makeTurn = (board: TBoard, cell: [number, number]): TBoard => {
-  //     const [row, column] = cell;
-  //   };
+  const makeTurn = (
+    board: TBoard,
+    cell: [number, number],
+    nullCell: { row: number; column: number },
+    isNear: (rowIndex: number, cellIndex: number) => boolean
+  ): TBoard => {
+    const [row, column] = cell;
+    const newBoard = [...board.map((row) => [...row])];
+
+    newBoard[nullCell.row][nullCell.column] = board[row][column];
+    newBoard[row][column] = null;
+
+    return newBoard;
+  };
+
+  const handleReplaceCell = (rowIndex: number, cellIndex: number) => {
+    if (isNear(rowIndex, cellIndex)) {
+      const newBoard = makeTurn(board, [rowIndex, cellIndex], nullCell, isNear);
+      dispatch(setBoard({ state: newBoard }));
+    }
+  };
 
   useEffect(() => {
     if (!board.length) {
-      navigate('/');
+      navigate('/15-puzzle-react/');
     }
   }, []);
 
@@ -75,6 +94,7 @@ export const Game = () => {
                 cell={cell}
                 isNear={isNear(rowIndex, cellIndex)}
                 cellSize={cellSize}
+                onClick={() => handleReplaceCell(rowIndex, cellIndex)}
               />
             ))
           )}

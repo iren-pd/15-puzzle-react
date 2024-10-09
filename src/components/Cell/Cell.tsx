@@ -5,10 +5,12 @@ export const Cell = ({
   isNear,
   cell,
   cellSize,
+  onClick,
 }: {
   isNear: boolean;
   cell: number | null;
   cellSize: number;
+  onClick: () => void;
 }) => {
   const styleForCell =
     'px-2 text-3xl border border-pink-700 flex items-center justify-center text-pink-700 font-bold';
@@ -29,6 +31,7 @@ export const Cell = ({
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={onClick}
     >
       {cell}
     </div>
