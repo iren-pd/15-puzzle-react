@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Cell } from '../components/Cell/Cell';
 import { Footer } from '../components/Footer/Footer';
+import { Header } from '../components/Header/Header';
 import { setBoard, TBoard } from '../redux/slices/board';
 import { RootState } from '../redux/store';
 
@@ -77,43 +78,43 @@ export const Game = () => {
   const [boardState, setBoardState] = useState(board);
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-pink-50 overflow-auto p-20">
-      {board.length ? (
-        <div
-          className="grid"
-          style={{
-            gridTemplateColumns: `repeat(${boardState[0].length}, ${cellSize}px)`,
-            gridTemplateRows: `repeat(${boardState.length}, ${cellSize}px)`,
-          }}
-        >
-          {boardState.map((row, rowIndex) =>
-            row.map((cell, cellIndex) => {
-              const cellNumber = board[rowIndex][cellIndex];
+    <>
+      <Header />
+      <div className="flex justify-center items-center min-h-screen bg-pink-50 overflow-auto p-20">
+        {board.length && (
+          <div
+            className="grid"
+            style={{
+              gridTemplateColumns: `repeat(${boardState[0].length}, ${cellSize}px)`,
+              gridTemplateRows: `repeat(${boardState.length}, ${cellSize}px)`,
+            }}
+          >
+            {boardState.map((row, rowIndex) =>
+              row.map((cell, cellIndex) => {
+                const cellNumber = board[rowIndex][cellIndex];
 
-              return (
-                <Cell
-                  key={`${rowIndex}-${cellIndex}`}
-                  cell={cellNumber}
-                  isNear={isNear(rowIndex, cellIndex)}
-                  cellSize={cellSize}
-                  handleReplaceCell={() =>
-                    handleReplaceCell(rowIndex, cellIndex)
-                  }
-                  nullCell={nullCell}
-                  cellIndex={cellIndex}
-                  rowIndex={rowIndex}
-                  turnRunning={turnRunning}
-                  setTurnRunning={setTurnRunning}
-                />
-              );
-            })
-          )}
-        </div>
-      ) : (
-        <div></div>
-      )}
-
+                return (
+                  <Cell
+                    key={`${rowIndex}-${cellIndex}`}
+                    cell={cellNumber}
+                    isNear={isNear(rowIndex, cellIndex)}
+                    cellSize={cellSize}
+                    handleReplaceCell={() =>
+                      handleReplaceCell(rowIndex, cellIndex)
+                    }
+                    nullCell={nullCell}
+                    cellIndex={cellIndex}
+                    rowIndex={rowIndex}
+                    turnRunning={turnRunning}
+                    setTurnRunning={setTurnRunning}
+                  />
+                );
+              })
+            )}
+          </div>
+        )}
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
