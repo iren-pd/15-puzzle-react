@@ -63,41 +63,43 @@ export const Cell = ({
     }
   };
 
-  const [text, _] = useState(cell);
+  const isNullCell = nullCell.row === rowIndex && nullCell.column === cellIndex;
 
   return (
     <div className={`relative border border-pink-500`} style={backgroundImage}>
-      <div
-        ref={ref}
-        className={`${styleForCell} ${
-          isHovered && isNear ? ' cursor-pointer' : ''
-        } `}
-        style={{
-          zIndex: nullCell ? -1 : 50,
-          pointerEvents: 'none',
-          ...backgroundImage,
-          backgroundColor:
-            isHovered && isNear ? 'rgba(255, 182, 193, 0.5)' : 'transparent',
-        }}
-        onClick={() => {
-          if (!turnRunning && isNear) {
-            setTurnRunning(true);
-            gsap
-              .to(ref.current, {
-                ...findDirection(rowIndex, cellIndex),
-                duration: 0.3,
-              })
-              .eventCallback('onComplete', (v) => {
-                setTurnRunning(false);
-                handleReplaceCell();
-              });
-          }
-        }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {text}
-      </div>
+      {!isNullCell && (
+        <div
+          ref={ref}
+          className={`${styleForCell} ${
+            isHovered && isNear ? ' cursor-pointer' : ''
+          } `}
+          style={{
+            zIndex: isNullCell ? -1 : 50,
+            pointerEvents: isNullCell ? 'none' : undefined,
+            ...backgroundImage,
+            backgroundColor:
+              isHovered && isNear ? 'rgba(255, 182, 193, 0.5)' : 'transparent',
+          }}
+          onClick={() => {
+            if (!turnRunning && isNear && !isNullCell) {
+              setTurnRunning(true);
+              gsap
+                .to(ref.current, {
+                  ...findDirection(rowIndex, cellIndex),
+                  duration: 0.3,
+                })
+                .eventCallback('onComplete', (v) => {
+                  setTurnRunning(false);
+                  handleReplaceCell();
+                });
+            }
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {cell}
+        </div>
+      )}
     </div>
   );
 };

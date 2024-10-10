@@ -13,9 +13,10 @@ export interface TNullCellPosition {
 
 export const Game = () => {
   const board = useSelector((state: RootState) => state.board);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [turnRunning, setTurnRunning] = useState(false)
+  const [turnRunning, setTurnRunning] = useState(false);
 
   const cellSize = board.length
     ? Math.min(
@@ -49,7 +50,7 @@ export const Game = () => {
   const makeTurn = (
     board: TBoard,
     cell: [number, number],
-    nullCell: { row: number; column: number },
+    nullCell: { row: number; column: number }
   ): TBoard => {
     const [row, column] = cell;
     const newBoard = [...board.map((row) => [...row])];
@@ -73,31 +74,39 @@ export const Game = () => {
     }
   }, []);
 
+  const [boardState, setBoardState] = useState(board);
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-pink-50 overflow-auto p-20">
       {board.length ? (
         <div
           className="grid"
           style={{
-            gridTemplateColumns: `repeat(${board[0].length}, ${cellSize}px)`,
-            gridTemplateRows: `repeat(${board.length}, ${cellSize}px)`,
+            gridTemplateColumns: `repeat(${boardState[0].length}, ${cellSize}px)`,
+            gridTemplateRows: `repeat(${boardState.length}, ${cellSize}px)`,
           }}
         >
-          {board.map((row, rowIndex) =>
-            row.map((cell, cellIndex) => (
-              <Cell
-                key={`${rowIndex}-${cellIndex}`}
-                cell={cell}
-                isNear={isNear(rowIndex, cellIndex)}
-                cellSize={cellSize}
-                handleReplaceCell={() => handleReplaceCell(rowIndex, cellIndex)}
-                nullCell={nullCell}
-                cellIndex={cellIndex}
-                rowIndex={rowIndex}
-                turnRunning={turnRunning}
-                setTurnRunning={setTurnRunning}
-              />
-            ))
+          {boardState.map((row, rowIndex) =>
+            row.map((cell, cellIndex) => {
+              const cellNumber = board[rowIndex][cellIndex];
+
+              return (
+                <Cell
+                  key={`${rowIndex}-${cellIndex}`}
+                  cell={cellNumber}
+                  isNear={isNear(rowIndex, cellIndex)}
+                  cellSize={cellSize}
+                  handleReplaceCell={() =>
+                    handleReplaceCell(rowIndex, cellIndex)
+                  }
+                  nullCell={nullCell}
+                  cellIndex={cellIndex}
+                  rowIndex={rowIndex}
+                  turnRunning={turnRunning}
+                  setTurnRunning={setTurnRunning}
+                />
+              );
+            })
           )}
         </div>
       ) : (
