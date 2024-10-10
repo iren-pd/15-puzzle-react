@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Cell } from '../components/Cell/Cell';
@@ -15,6 +15,7 @@ export const Game = () => {
   const board = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [turnRunning, setTurnRunning] = useState(false)
 
   const cellSize = board.length
     ? Math.min(
@@ -49,7 +50,6 @@ export const Game = () => {
     board: TBoard,
     cell: [number, number],
     nullCell: { row: number; column: number },
-    isNear: (rowIndex: number, cellIndex: number) => boolean
   ): TBoard => {
     const [row, column] = cell;
     const newBoard = [...board.map((row) => [...row])];
@@ -62,7 +62,7 @@ export const Game = () => {
 
   const handleReplaceCell = (rowIndex: number, cellIndex: number) => {
     if (isNear(rowIndex, cellIndex)) {
-      const newBoard = makeTurn(board, [rowIndex, cellIndex], nullCell, isNear);
+      const newBoard = makeTurn(board, [rowIndex, cellIndex], nullCell);
       dispatch(setBoard({ state: newBoard }));
     }
   };
@@ -91,8 +91,11 @@ export const Game = () => {
                 isNear={isNear(rowIndex, cellIndex)}
                 cellSize={cellSize}
                 onClick={() => handleReplaceCell(rowIndex, cellIndex)}
-                position={{ row: rowIndex, column: cellIndex }}
                 nullCell={nullCell}
+                cellIndex={cellIndex}
+                rowIndex={rowIndex}
+                turnRunning={turnRunning}
+                setTurnRunning={setTurnRunning}
               />
             ))
           )}
