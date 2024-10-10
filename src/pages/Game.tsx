@@ -90,7 +90,7 @@ export const Game = () => {
                 cell={cell}
                 isNear={isNear(rowIndex, cellIndex)}
                 cellSize={cellSize}
-                onClick={() => handleReplaceCell(rowIndex, cellIndex)}
+                handleReplaceCell={() => handleReplaceCell(rowIndex, cellIndex)}
                 nullCell={nullCell}
                 cellIndex={cellIndex}
                 rowIndex={rowIndex}

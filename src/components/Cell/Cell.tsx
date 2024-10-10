@@ -1,4 +1,3 @@
-import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { useRef, useState } from 'react';
 import cellBackground from '../../img/icon-board.svg';
@@ -7,14 +6,14 @@ export const Cell = ({
   isNear,
   cell,
   cellSize,
-  onClick,
+  handleReplaceCell,
   turnRunning,
   setTurnRunning,
 }: {
   isNear: boolean;
   cell: number | null;
   cellSize: number;
-  onClick: () => void;
+  handleReplaceCell: () => void;
   turnRunning: boolean;
   setTurnRunning: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -31,19 +30,23 @@ export const Cell = ({
   const [isHovered, setIsHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  useGSAP((context, contextSafe) => {
-    const onClickCell = () => {
-      if (contextSafe) {
-        contextSafe(() => {
-          if (ref.current) {
-            gsap.to(ref.current, { x: `+=${cellSize}`, duration: 0.1 });
-            //   gsap.to(ref.current, { x: `-=${cellSize}` });
-            //   gsap.to(ref.current, { y: `+=${cellSize}` });
-            //   gsap.to(ref.current, { y: `-=${cellSize}` });
-          }
-        })();
-      }
-    };
+  const onClickCell = () => {
+    if (!turnRunning) {
+      setTurnRunning(true);
+
+      gsap
+        .to(ref.current, {
+          x: `+=${cellSize}`,
+          duration: 2,
+        })
+        .eventCallback('onComplete', () => {
+          setTurnRunning(false);
+        });
+
+      //   gsap.to(ref.current, { x: `-=${cellSize}` });
+      //   gsap.to(ref.current, { y: `+=${cellSize}` });
+      //   gsap.to(ref.current, { y: `-=${cellSize}` });
+    }
 
     if (ref.current) {
       ref.current.addEventListener('click', onClickCell);
@@ -54,7 +57,7 @@ export const Cell = ({
         ref.current.removeEventListener('click', onClickCell);
       }
     };
-  }, {});
+  };
 
   return (
     <div
@@ -62,7 +65,17 @@ export const Cell = ({
       style={backgroundImage}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onClick}
+      onClick={() => {
+        if (!turnRunning) {
+          setTurnRunning(true);
+          gsap
+            .to(ref.current, { x: `+=${cellSize}`, duration: 2 })
+            .eventCallback('onComplete', (v) => {
+              setTurnRunning(false);
+              handleReplaceCell();
+            });
+        }
+      }}
     >
       <div
         ref={ref}
@@ -70,6 +83,7 @@ export const Cell = ({
           isHovered && isNear ? ' cursor-pointer' : ''
         } `}
         style={{
+          zIndex: 50,
           backgroundImage,
           backgroundColor:
             isHovered && isNear ? 'rgba(255, 182, 193, 0.5)' : 'transparent',
