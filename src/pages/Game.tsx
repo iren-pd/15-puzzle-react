@@ -6,6 +6,7 @@ import { Footer } from '../components/Footer/Footer';
 import { Header } from '../components/Header/Header';
 import { setBoard, TBoard } from '../redux/slices/board';
 import { RootState } from '../redux/store';
+import { addToHistory } from '../redux/slices/history';
 
 export interface TNullCellPosition {
   row: number;
@@ -66,6 +67,7 @@ export const Game = () => {
     if (isNear(rowIndex, cellIndex)) {
       const newBoard = makeTurn(board, [rowIndex, cellIndex], nullCell);
       dispatch(setBoard({ state: newBoard }));
+      dispatch(addToHistory({board: newBoard}))
     }
   };
 
