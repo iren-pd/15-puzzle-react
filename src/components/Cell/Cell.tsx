@@ -39,58 +39,59 @@ export const Cell = ({
   const findDirection = (
     rowIndex: number,
     cellIndex: number
-  ): { x: string } | { y: string } | null => {
+  ): { x: string } | { y: string } | object => {
     const { row, column } = nullCell;
 
     switch (true) {
       // Вверх
-      case column === cellIndex && row === rowIndex - 1:
+      case column === cellIndex && row === rowIndex + 1:
         return { y: `+=${cellSize}` };
 
       // Вниз
-      case column === cellIndex && row === rowIndex + 1:
+      case column === cellIndex && row === rowIndex - 1:
         return { y: `-=${cellSize}` };
 
       // Вправо
-      case row === rowIndex && column === cellIndex - 1:
+      case row === rowIndex && column === cellIndex + 1:
         return { x: `+=${cellSize}` };
 
       // Влево
-      case row === rowIndex && column === cellIndex + 1:
+      case row === rowIndex && column === cellIndex - 1:
         return { x: `-=${cellSize}` };
       default:
-        return null;
+        return {};
     }
   };
 
   const [text, _] = useState(cell);
 
   return (
-    <div
-      className={`relative border border-pink-500`}
-      style={backgroundImage}
-      onClick={() => {
-        if (!turnRunning && isNear) {
-          setTurnRunning(true);
-          gsap
-            .to(ref.current, { ...findDirection, duration: 0.3 })
-            .eventCallback('onComplete', (v) => {
-              setTurnRunning(false);
-              handleReplaceCell();
-            });
-        }
-      }}
-    >
+    <div className={`relative border border-pink-500`} style={backgroundImage}>
       <div
         ref={ref}
         className={`${styleForCell} ${
           isHovered && isNear ? ' cursor-pointer' : ''
         } `}
         style={{
-          zIndex: 50,
-          backgroundImage,
+          zIndex: nullCell ? -1 : 50,
+          pointerEvents: 'none',
+          ...backgroundImage,
           backgroundColor:
             isHovered && isNear ? 'rgba(255, 182, 193, 0.5)' : 'transparent',
+        }}
+        onClick={() => {
+          if (!turnRunning && isNear) {
+            setTurnRunning(true);
+            gsap
+              .to(ref.current, {
+                ...findDirection(rowIndex, cellIndex),
+                duration: 0.3,
+              })
+              .eventCallback('onComplete', (v) => {
+                setTurnRunning(false);
+                handleReplaceCell();
+              });
+          }
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
