@@ -6,6 +6,9 @@ export const Cell = ({
   isNear,
   cell,
   cellSize,
+  nullCell,
+  cellIndex,
+  rowIndex,
   handleReplaceCell,
   turnRunning,
   setTurnRunning,
@@ -13,6 +16,9 @@ export const Cell = ({
   isNear: boolean;
   cell: number | null;
   cellSize: number;
+  nullCell: { row: number; column: number };
+  cellIndex: number;
+  rowIndex: number;
   handleReplaceCell: () => void;
   turnRunning: boolean;
   setTurnRunning: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,46 +36,44 @@ export const Cell = ({
   const [isHovered, setIsHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const onClickCell = () => {
-    if (!turnRunning) {
-      setTurnRunning(true);
+  const findDirection = (
+    rowIndex: number,
+    cellIndex: number
+  ): { x: string } | { y: string } | null => {
+    const { row, column } = nullCell;
 
-      gsap
-        .to(ref.current, {
-          x: `+=${cellSize}`,
-          duration: 2,
-        })
-        .eventCallback('onComplete', () => {
-          setTurnRunning(false);
-        });
+    switch (true) {
+      // Вверх
+      case column === cellIndex && row === rowIndex - 1:
+        return { y: `+=${cellSize}` };
 
-      //   gsap.to(ref.current, { x: `-=${cellSize}` });
-      //   gsap.to(ref.current, { y: `+=${cellSize}` });
-      //   gsap.to(ref.current, { y: `-=${cellSize}` });
+      // Вниз
+      case column === cellIndex && row === rowIndex + 1:
+        return { y: `-=${cellSize}` };
+
+      // Вправо
+      case row === rowIndex && column === cellIndex - 1:
+        return { x: `+=${cellSize}` };
+
+      // Влево
+      case row === rowIndex && column === cellIndex + 1:
+        return { x: `-=${cellSize}` };
+      default:
+        return null;
     }
-
-    if (ref.current) {
-      ref.current.addEventListener('click', onClickCell);
-    }
-
-    return () => {
-      if (ref.current) {
-        ref.current.removeEventListener('click', onClickCell);
-      }
-    };
   };
+
+  const [text, _] = useState(cell);
 
   return (
     <div
       className={`relative border border-pink-500`}
       style={backgroundImage}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        if (!turnRunning) {
+        if (!turnRunning && isNear) {
           setTurnRunning(true);
           gsap
-            .to(ref.current, { x: `+=${cellSize}`, duration: 2 })
+            .to(ref.current, { ...findDirection, duration: 0.3 })
             .eventCallback('onComplete', (v) => {
               setTurnRunning(false);
               handleReplaceCell();
@@ -88,8 +92,10 @@ export const Cell = ({
           backgroundColor:
             isHovered && isNear ? 'rgba(255, 182, 193, 0.5)' : 'transparent',
         }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        {cell}
+        {text}
       </div>
     </div>
   );
