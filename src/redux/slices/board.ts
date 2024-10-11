@@ -31,6 +31,24 @@ export const boardSlice = createSlice({
 
       for (let i = 0; i <= arr.length; i++) {
         while (arr.length) {
+          board.push(arr.splice(0, columns));
+        }
+      }
+    },
+
+    winBoard: (state, action: PayloadAction<TBoardSize>) => {
+      const board = state;
+      const { rows, columns } = action.payload;
+      const arr: (number | null)[] = [];
+
+      for (let i = 1; i <= rows * columns - 1; i++) {
+        arr.push(i);
+      }
+
+      arr.push(null);
+
+      for (let i = 0; i <= arr.length; i++) {
+        while (arr.length) {
           const row = arr.splice(0, columns);
           board.push(row);
         }

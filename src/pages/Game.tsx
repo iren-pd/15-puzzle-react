@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { Cell } from '../components/Cell/Cell';
 import { Footer } from '../components/Footer/Footer';
 import { Header } from '../components/Header/Header';
+import { WinModal } from '../components/WinModal/WinModal';
 import { setBoard, TBoard } from '../redux/slices/board';
-import { RootState } from '../redux/store';
 import { addToHistory } from '../redux/slices/history';
+import { RootState } from '../redux/store';
+import { resetTimer, startTimer, stopTimer } from '../redux/slices/timer';
 
 export interface TNullCellPosition {
   row: number;
@@ -15,10 +17,12 @@ export interface TNullCellPosition {
 
 export const Game = () => {
   const board = useSelector((state: RootState) => state.board);
+  const timer = useSelector((state: RootState) => state.timer);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [turnRunning, setTurnRunning] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const cellSize = board.length
     ? Math.min(
@@ -63,11 +67,32 @@ export const Game = () => {
     return newBoard;
   };
 
+  const isWinBoard = (currentBoard: TBoard, rows: number, columns: number) => {
+    const winBoard: TBoard = [];
+    const arr: (number | null)[] = [];
+
+    for (let i = 1; i <= rows * columns - 1; i++) {
+      arr.push(i);
+    }
+    arr.push(null);
+
+    for (let i = 0; i < rows; i++) {
+      winBoard.push(arr.splice(0, columns));
+    }
+
+    return JSON.stringify(currentBoard) === JSON.stringify(winBoard);
+  };
+
   const handleReplaceCell = (rowIndex: number, cellIndex: number) => {
     if (isNear(rowIndex, cellIndex)) {
       const newBoard = makeTurn(board, [rowIndex, cellIndex], nullCell);
       dispatch(setBoard({ state: newBoard }));
-      dispatch(addToHistory({board: newBoard}))
+      dispatch(addToHistory({ board: newBoard }));
+
+      if (isWinBoard(newBoard, board.length, board[0].length)) {
+        dispatch(stopTimer());
+        setIsModalOpen(true);
+      }
     }
   };
 
@@ -76,6 +101,12 @@ export const Game = () => {
       navigate('/15-puzzle-react/');
     }
   }, []);
+
+  useEffect(() => {
+    dispatch(resetTimer());
+    dispatch(startTimer());
+
+  }, [dispatch]);
 
   const [boardState, setBoardState] = useState(board);
 
@@ -117,6 +148,13 @@ export const Game = () => {
         )}
       </div>
       <Footer />
+
+      {isModalOpen && (
+        <WinModal
+          message="Вы выиграли!"
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </>
   );
 };
