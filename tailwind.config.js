@@ -1,27 +1,3 @@
-const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
-const { join } = require('path');
+import { buildConfig } from '../utils/src/tailwind.config.ts';
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    join(
-      __dirname,
-      '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
-    ),
-    ...createGlobPatternsForDependencies(__dirname),
-  ],
-  theme: {
-    extend: {
-      keyframes: {
-        catRun: {
-          '0%': { transform: 'translateX(-100vw)' },
-          '100%': { transform: 'translateX(100vw)' },
-        },
-      },
-      animation: {
-        catRun: 'catRun 15s linear infinite',
-      },
-    },
-  },
-  plugins: [],
-};
+export default buildConfig(__dirname);
