@@ -7,8 +7,8 @@ import { createBoard, resetBoard } from '../redux/slices/board';
 import { RootState } from '../redux/store';
 
 type FormValues = {
-  rows: number;
-  columns: number;
+  rows: number | '';
+  columns: number | '';
 };
 
 export const Config = () => {
@@ -29,7 +29,7 @@ export const Config = () => {
     watch,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: { rows: 0, columns: 0 },
+    defaultValues: { rows: '', columns: '' },
   });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
