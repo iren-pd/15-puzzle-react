@@ -1,32 +1,48 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Footer } from '../components/Footer/Footer';
 import { createBoard, resetBoard } from '../redux/slices/board';
 import { RootState } from '../redux/store';
 
+type FormValues = {
+  rows: number;
+  columns: number;
+};
+
 export const Config = () => {
   const dispatch = useDispatch();
   const navigation = useNavigate();
   const board = useSelector((state: RootState) => state.board);
-  const [sizeBoard, setSizeBoard] = useState({ rows: 0, columns: 0 });
 
-  const handleSizeBoardInput = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    const { name, value } = event.target;
-    setSizeBoard((prev) => ({ ...prev, [name]: value }));
+  const labelStyles = 'flex justify-between items-center text-pink-700';
+  const inputStyles =
+    'mt-2 ml-2 p-2 border bg-pink-100 border-pink-500 rounded focus:outline-none focus:ring-2 focus:ring-pink-400 transition duration-200 hover:border-pink-700';
+  const buttonStyles =
+    'px-4 py-2 bg-pink-600 text-white font-semibold rounded hover:bg-pink-700 transition duration-200';
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: { rows: 0, columns: 0 },
+  });
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    if (!data.rows || !data.columns) return;
+    dispatch(createBoard(data));
+    navigation('/15-puzzle-react/game');
   };
+
+  const sizeBoard = watch();
 
   const handleSizeButtonClick = (rows: number, columns: number) => {
-    setSizeBoard({ rows, columns });
-  };
-
-  const handleSizeBoardSubmit = () => {
-    if (!sizeBoard.rows || !sizeBoard.columns) return;
-
-    dispatch(createBoard(sizeBoard));
-    navigation('/15-puzzle-react/game');
+    setValue('rows', rows);
+    setValue('columns', columns);
   };
 
   useEffect(() => {
@@ -42,12 +58,12 @@ export const Config = () => {
           Выберите размер поля
         </h1>
 
-        <div className="grid grid-cols-3 gap-4 mb-4 pb-">
+        <div className="grid grid-cols-3 gap-4 mb-4">
           {[3, 4, 5, 6, 8, 10].map((size) => (
             <button
               key={size}
               onClick={() => handleSizeButtonClick(size, size)}
-              className={`px-4 py-2 bg-pink-600 text-white font-semibold rounded hover:bg-pink-700 transition duration-200 ${
+              className={`${buttonStyles} ${
                 sizeBoard.rows === size ? 'bg-pink-700' : ''
               }`}
             >
@@ -56,47 +72,38 @@ export const Config = () => {
           ))}
         </div>
 
-        <div className="flex flex-col space-y-4 p-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col space-y-4 p-4"
+        >
           <h3 className="text-xl text-pink-700 font-bold text-center">
             Или создайте сами!
           </h3>
-          <label
-            htmlFor="rows"
-            className="flex justify-between items-center text-pink-700"
-          >
+
+          <label htmlFor="rows" className={labelStyles}>
             Количество строк
             <input
-              name="rows"
-              value={sizeBoard.rows === 0 ? '' : sizeBoard.rows}
-              onChange={handleSizeBoardInput}
+              {...register('rows', { required: 'Укажите количество строк' })}
               type="number"
-              className="mt-2 ml-2 p-2 border bg-pink-100 border-pink-500 rounded focus:outline-none focus:ring-2 focus:ring-pink-400 transition duration-200 hover:border-pink-700"
+              className={inputStyles}
             />
           </label>
 
-          <label
-            htmlFor="columns"
-            className="flex justify-between items-center text-pink-700"
-          >
+          <label htmlFor="columns" className={labelStyles}>
             Количество столбцов
             <input
-              name="columns"
-              value={sizeBoard.columns === 0 ? '' : sizeBoard.columns}
-              onChange={handleSizeBoardInput}
+              {...register('columns', {
+                required: 'Укажите количество столбцов',
+              })}
               type="number"
-              className="mt-2 ml-2 p-2 border bg-pink-100 border-pink-500 rounded focus:outline-none focus:ring-2 focus:ring-pink-400 transition duration-200 hover:border-pink-700"
+              className={inputStyles}
             />
           </label>
-        </div>
-      </div>
 
-      <div className="mt-4">
-        <button
-          onClick={handleSizeBoardSubmit}
-          className="px-4 py-2 bg-pink-600 text-white font-semibold rounded hover:bg-pink-700 transition duration-200"
-        >
-          Начать игру
-        </button>
+          <button type="submit" className={buttonStyles}>
+            Начать игру
+          </button>
+        </form>
       </div>
 
       <Footer />

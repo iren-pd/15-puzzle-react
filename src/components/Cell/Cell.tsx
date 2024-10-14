@@ -23,7 +23,7 @@ export const Cell = ({
   turnRunning: boolean;
   setTurnRunning: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const styleForCell =
+  const cellStyles =
     'px-2 text-3xl flex items-center justify-center text-pink-700 font-bold absolute inset-0';
   const backgroundImage = {
     width: `${cellSize}px`,
@@ -70,7 +70,7 @@ export const Cell = ({
       {!isNullCell && (
         <div
           ref={ref}
-          className={`${styleForCell} ${
+          className={`${cellStyles} ${
             isHovered && isNear ? ' cursor-pointer' : ''
           } `}
           style={{
