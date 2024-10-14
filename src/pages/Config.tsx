@@ -2,13 +2,15 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Footer } from '../components/Footer/Footer';
 import { createBoard, resetBoard } from '../redux/slices/board';
 import { RootState } from '../redux/store';
 
 type FormValues = {
-  rows: number | '';
-  columns: number | '';
+  rows: number | null;
+  columns: number | null;
 };
 
 export const Config = () => {
@@ -29,11 +31,41 @@ export const Config = () => {
     watch,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: { rows: '', columns: '' },
+    defaultValues: { rows: null, columns: null },
   });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    if (!data.rows || !data.columns) return;
+    let errorMessage = '';
+
+    switch (true) {
+      case !data.rows && !data.columns:
+        errorMessage = 'Введите размер поля';
+        break;
+      case !data.rows:
+        errorMessage = 'Введите количество строк';
+        break;
+      case !data.columns:
+        errorMessage = 'Введите количество столбцов';
+        break;
+      case data.rows < 2:
+        errorMessage = 'Количество строк не может быть меньше 2';
+        break;
+      case data.rows > 10:
+        errorMessage = 'Количество строк не может быть больше 10';
+        break;
+      case data.columns < 2:
+        errorMessage = 'Количество столбцов не может быть меньше 2';
+        break;
+      case data.columns > 10:
+        errorMessage = 'Количество столбцов не может быть больше 10';
+        break;
+    }
+
+    if (errorMessage) {
+      toast.error(errorMessage);
+      return;
+    }
+
     dispatch(createBoard(data));
     navigation('/15-puzzle-react/game');
   };
@@ -53,6 +85,7 @@ export const Config = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-cover bg-center">
+      <ToastContainer />
       <div className="flex flex-col space-y-4 p-4 bg-pink-300 rounded-lg shadow-lg">
         <h1 className="text-2xl text-pink-700 font-bold mb-2 text-center">
           Выберите размер поля
@@ -83,17 +116,7 @@ export const Config = () => {
           <label htmlFor="rows" className={labelStyles}>
             Количество строк
             <input
-              {...register('rows', {
-                required: 'Укажите количество строк',
-                min: {
-                  value: 2,
-                  message: 'Минимальное значение: 2',
-                },
-                max: {
-                  value: 10,
-                  message: 'Максимальное значение: 10',
-                },
-              })}
+              {...register('rows')}
               type="number"
               className={inputStyles}
             />
@@ -102,17 +125,7 @@ export const Config = () => {
           <label htmlFor="columns" className={labelStyles}>
             Количество столбцов
             <input
-              {...register('columns', {
-                required: 'Укажите количество столбцов',
-                min: {
-                  value: 2,
-                  message: 'Минимальное значение: 2',
-                },
-                max: {
-                  value: 10,
-                  message: 'Максимальное значение: 10',
-                },
-              })}
+              {...register('columns')}
               type="number"
               className={inputStyles}
             />
