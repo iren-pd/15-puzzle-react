@@ -83,7 +83,17 @@ export const Config = () => {
           <label htmlFor="rows" className={labelStyles}>
             Количество строк
             <input
-              {...register('rows', { required: 'Укажите количество строк' })}
+              {...register('rows', {
+                required: 'Укажите количество строк',
+                min: {
+                  value: 2,
+                  message: 'Минимальное значение: 2',
+                },
+                max: {
+                  value: 10,
+                  message: 'Максимальное значение: 10',
+                },
+              })}
               type="number"
               className={inputStyles}
             />
@@ -94,6 +104,14 @@ export const Config = () => {
             <input
               {...register('columns', {
                 required: 'Укажите количество столбцов',
+                min: {
+                  value: 2,
+                  message: 'Минимальное значение: 2',
+                },
+                max: {
+                  value: 10,
+                  message: 'Максимальное значение: 10',
+                },
               })}
               type="number"
               className={inputStyles}
