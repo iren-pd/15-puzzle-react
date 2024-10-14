@@ -20,7 +20,7 @@ export const Config = () => {
 
   const labelStyles = 'flex justify-between items-center text-pink-700';
   const inputStyles =
-    'mt-2 ml-2 p-2 border bg-pink-100 border-pink-500 rounded focus:outline-none focus:ring-2 focus:ring-pink-400 transition duration-200 hover:border-pink-700';
+    'mt-2 ml-2 p-2 border bg-pink-100 border-pink-500 rounded focus:outline-none focus:ring-2 focus:ring-pink-400 transition duration-200 hover:border-pink-700 appearance-none -moz-appearance: textfield';
   const buttonStyles =
     'px-4 py-2 bg-pink-600 text-white font-semibold rounded hover:bg-pink-700 transition duration-200';
 
@@ -38,24 +38,34 @@ export const Config = () => {
     let errorMessage = '';
 
     switch (true) {
+      case isNaN(data.rows) || isNaN(data.columns):
+        errorMessage = 'Возможно ввести только число';
+        break;
+
       case !data.rows && !data.columns:
         errorMessage = 'Введите размер поля';
         break;
+
       case !data.rows:
         errorMessage = 'Введите количество строк';
         break;
+
       case !data.columns:
         errorMessage = 'Введите количество столбцов';
         break;
+
       case data.rows < 2:
         errorMessage = 'Количество строк не может быть меньше 2';
         break;
+
       case data.rows > 10:
         errorMessage = 'Количество строк не может быть больше 10';
         break;
+
       case data.columns < 2:
         errorMessage = 'Количество столбцов не может быть меньше 2';
         break;
+
       case data.columns > 10:
         errorMessage = 'Количество столбцов не может быть больше 10';
         break;
@@ -73,8 +83,10 @@ export const Config = () => {
   const sizeBoard = watch();
 
   const handleSizeButtonClick = (rows: number, columns: number) => {
-    setValue('rows', rows);
-    setValue('columns', columns);
+    if (!isNaN(rows) || !isNaN(columns)) {
+      setValue('rows', rows);
+      setValue('columns', columns);
+    }
   };
 
   useEffect(() => {
@@ -115,18 +127,14 @@ export const Config = () => {
 
           <label htmlFor="rows" className={labelStyles}>
             Количество строк
-            <input
-              {...register('rows')}
-              type="number"
-              className={inputStyles}
-            />
+            <input {...register('rows')} type="text" className={inputStyles} />
           </label>
 
           <label htmlFor="columns" className={labelStyles}>
             Количество столбцов
             <input
               {...register('columns')}
-              type="number"
+              type="text"
               className={inputStyles}
             />
           </label>
